@@ -46,6 +46,10 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - aoc2020
+    - tasty
+    - tasty-hunit
+    - tasty-quickcheck
+    - QuickCheck
 
 benchmarks:
   aoc2020-bench:

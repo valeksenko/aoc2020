@@ -1,2 +1,11 @@
+import Test.Tasty
+import qualified D01P1Spec
+
 main :: IO ()
-main = putStrLn "Test suite not yet implemented"
+main = defaultMain tests
+
+tests :: TestTree
+tests = testGroup "Tests"
+      [
+            D01P1Spec.tests
+      ]
