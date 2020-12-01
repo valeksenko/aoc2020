@@ -1,16 +1,19 @@
 module D01P1 (
     findentries
+  , findentrytuple
 ) where
 
 import Data.List
 import Data.Maybe
 
 findentries :: [Integer] -> Maybe Integer
-findentries l = findAddends l >>= (Just . uncurry (*))
+findentries l = findentrytuple 2020 l >>= (Just . uncurry (*))
+
+findentrytuple :: Integer -> [Integer] -> Maybe (Integer, Integer)
+findentrytuple target l = uncons l >>= findAddends
     where
-        findAddends l = uncons l >>= findA
-        findA (e, l) = maybe (findAddends l) (Just . (,) e) $ find (exactSum e) l
-        exactSum x y = (x + y) == 2020
+        findAddends (e, l) = maybe (findentrytuple target l) (Just . (,) e) $ find (exactSum e) l
+        exactSum x y = (x + y) == target
 
 {-
 https://adventofcode.com/2020/day/1
