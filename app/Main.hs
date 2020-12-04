@@ -2,10 +2,10 @@ module Main where
 
 import Debug.Trace
 
-import D03
-import D03P2
+import D04
+import D04P2
 
 main :: IO ()
 main = do
-    f <- readFile "data/d03.txt"
-    print . travelslopes $ mkToboggan f
+    f <- readFile "data/d04.txt"
+    print . validdocs $ mkDocuments f
