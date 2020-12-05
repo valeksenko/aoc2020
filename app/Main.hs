@@ -2,10 +2,9 @@ module Main where
 
 import Debug.Trace
 
-import D04
-import D04P2
+import D05P2
 
 main :: IO ()
 main = do
-    f <- readFile "data/d04.txt"
-    print . validdocs $ mkDocuments f
+    f <- readFile "data/d05.txt"
+    print . findseat $ lines f
