@@ -2,9 +2,9 @@ module Main where
 
 import Debug.Trace
 
-import D05P2
+import D06P2
 
 main :: IO ()
 main = do
-    f <- readFile "data/d05.txt"
-    print . findseat $ lines f
+    f <- readFile "data/d06.txt"
+    print . groupquestions $ lines f

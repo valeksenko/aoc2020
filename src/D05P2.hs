@@ -7,14 +7,14 @@ import Data.List
 import Data.Maybe
 import Data.Tuple
 
-findseat :: [BoardPass] -> Maybe Int
-findseat = maybe Nothing (Just . fst) . find missing . zip [8..]  . sort . filter middle . scanPasses
+findseat :: [BoardPass] -> Maybe Seat
+findseat = maybe Nothing (Just . fst) . find missing . zip [8::Seat ..] . sort . filter middle . scanPasses
     where
         middle s = (s > 7) && (s < 127*8)
         missing (s, s') = s /= s'
 
 {-
-https://adventofcode.com/2020/day/5
+https://adventofcode.com/2020/day/5#part2
 
 You write a quick program to use your phone's camera to scan all of the nearby boarding passes (your puzzle input); perhaps you can find your seat through process of elimination.
 

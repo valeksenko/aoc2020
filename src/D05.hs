@@ -14,8 +14,8 @@ type Seat = Int
 scanPasses :: [BoardPass] -> [Seat]
 scanPasses = map seat
     where
-        seat = uncurry (+) . first ((*) 8) . locateSeat . splitAt 7
-        locateSeat (r, c) = (row r, column c)
+        seat = locateSeat . splitAt 7
+        locateSeat (r, c) = 8 * (row r) + (column c)
 
 row :: String -> Int
 row = fst . foldl' apply (0, 127) . zip [2^x | x <- [6,5..]] . map half
