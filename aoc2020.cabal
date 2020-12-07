@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b16c84d76fab3ad7cad6f062e921897fced9cd5db4773f7122e344b1f4f054e3
+-- hash: 7e27a30451d660a0399f5d8193f404db302777fe9be04cc47b091b617db3aee3
 
 name:           aoc2020
 version:        0.1.0.0
@@ -42,13 +42,18 @@ library
       D05P2
       D06P1
       D06P2
+      D07
+      D07P1
+      D07P2
   other-modules:
       Paths_aoc2020
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      attoparsec
+    , base >=4.7 && <5
     , extra
+    , text
   default-language: Haskell2010
 
 executable aoc2020-exe
@@ -60,8 +65,10 @@ executable aoc2020-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aoc2020
+    , attoparsec
     , base >=4.7 && <5
     , extra
+    , text
   default-language: Haskell2010
 
 test-suite aoc2020-test
@@ -80,6 +87,8 @@ test-suite aoc2020-test
       D05P2Spec
       D06P1Spec
       D06P2Spec
+      D07P1Spec
+      D07P2Spec
       Paths_aoc2020
   hs-source-dirs:
       test
@@ -87,11 +96,13 @@ test-suite aoc2020-test
   build-depends:
       QuickCheck
     , aoc2020
+    , attoparsec
     , base >=4.7 && <5
     , extra
     , tasty
     , tasty-hunit
     , tasty-quickcheck
+    , text
   default-language: Haskell2010
 
 benchmark aoc2020-bench
@@ -104,7 +115,9 @@ benchmark aoc2020-bench
   ghc-options: -threaded
   build-depends:
       aoc2020
+    , attoparsec
     , base >=4.7 && <5
     , criterion
     , extra
+    , text
   default-language: Haskell2010
