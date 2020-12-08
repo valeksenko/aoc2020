@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7e27a30451d660a0399f5d8193f404db302777fe9be04cc47b091b617db3aee3
+-- hash: c7acff4d027ed2d2f50b8ad61c0808a5c45618aba38c34b3093ecaa229420d00
 
 name:           aoc2020
 version:        0.1.0.0
@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      Bootcode
       D01P1
       D01P2
       D02P1
@@ -45,6 +46,8 @@ library
       D07
       D07P1
       D07P2
+      D08P1
+      D08P2
   other-modules:
       Paths_aoc2020
   hs-source-dirs:
@@ -52,6 +55,7 @@ library
   build-depends:
       attoparsec
     , base >=4.7 && <5
+    , containers
     , extra
     , text
   default-language: Haskell2010
@@ -67,6 +71,7 @@ executable aoc2020-exe
       aoc2020
     , attoparsec
     , base >=4.7 && <5
+    , containers
     , extra
     , text
   default-language: Haskell2010
@@ -89,6 +94,8 @@ test-suite aoc2020-test
       D06P2Spec
       D07P1Spec
       D07P2Spec
+      D08P1Spec
+      D08P2Spec
       Paths_aoc2020
   hs-source-dirs:
       test
@@ -98,6 +105,7 @@ test-suite aoc2020-test
     , aoc2020
     , attoparsec
     , base >=4.7 && <5
+    , containers
     , extra
     , tasty
     , tasty-hunit
@@ -117,6 +125,7 @@ benchmark aoc2020-bench
       aoc2020
     , attoparsec
     , base >=4.7 && <5
+    , containers
     , criterion
     , extra
     , text
