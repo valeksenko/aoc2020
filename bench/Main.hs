@@ -2,8 +2,9 @@ module Main (main) where
 
 import Criterion.Main (bench, bgroup, defaultMain, env, envWithCleanup, nf)
 
-import D01P1
-import D01P2
+import Bootcode
+import D08P1
+import D08P2
 
 getDayInput :: String -> IO String
 getDayInput day = readFile ("data/d" ++ day ++ ".txt")
@@ -15,9 +16,13 @@ inputToIntegerList :: String -> [Integer]
 inputToIntegerList = map read . lines
 
 main :: IO ()
-main = defaultMain
-  [ env (getDayInput "01") $ \input -> bgroup "Day 1"
-      [ bench "part 1" $ (nf (sum . D01P1.findentries . inputToIntegerList) input)
-      , bench "part 2" $ (nf (sum . D01P2.findtripleentries . inputToIntegerList) input)
+main = do
+    code <- parseFile "data/d08.txt"
+    defaultMain
+      [
+        bgroup "Day 8"
+            [
+                bench "part 1" $ (nf D08P1.execonce code)
+              , bench "part 2" $ (nf D08P2.execmodified code)
+            ]
       ]
-  ]

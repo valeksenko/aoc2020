@@ -27,7 +27,7 @@ modifyCode p code = take p code ++ [modify $ code !! p] ++ drop (p + 1) code
     where
         modify (JMP a) = NOP a
         modify (NOP a) = JMP a
-        modify op = op 
+        modify op = op -- not optimizing to skip exec for non-modified version
 
 {-
 https://adventofcode.com/2020/day/8#part2
