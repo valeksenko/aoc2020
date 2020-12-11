@@ -3,8 +3,8 @@ module Main (main) where
 import Criterion.Main (bench, bgroup, defaultMain, env, envWithCleanup, nf)
 
 import Bootcode
-import D08P1
-import D08P2
+import D11P1
+import D11P2
 
 getDayInput :: String -> IO String
 getDayInput day = readFile ("data/d" ++ day ++ ".txt")
@@ -17,12 +17,13 @@ inputToIntegerList = map read . lines
 
 main :: IO ()
 main = do
-    code <- parseFile "data/d08.txt"
+    let day = "11"
+    area <- getDayInput day
     defaultMain
       [
-        bgroup "Day 8"
+        bgroup ("Day " ++ day)
             [
-                bench "part 1" $ (nf D08P1.execonce code)
-              , bench "part 2" $ (nf D08P2.execmodified code)
+                bench "part 1" $ (nf D11P1.occupied area)
+              , bench "part 2" $ (nf D11P2.occupied area)
             ]
       ]
