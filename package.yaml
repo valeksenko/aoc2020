@@ -25,6 +25,8 @@ dependencies:
 - extra
 - attoparsec
 - containers
+- split
+- sbv
 
 library:
   source-dirs: src
