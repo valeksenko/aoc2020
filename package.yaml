@@ -27,6 +27,7 @@ dependencies:
 - containers
 - split
 - sbv
+- gloss
 
 library:
   source-dirs: src

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d4830f2fa9f65281716620fad2e866a1d1e6fb2e5ee045965719763f2de8a25e
+-- hash: dbc3086c7a0b90dcefd05db5d856db1c81163623ccbcb6ba5fb276bfc2f45815
 
 name:           aoc2020
 version:        0.1.0.0
@@ -73,6 +73,8 @@ library
       D18P2
       D19
       D19P1
+      D20
+      D20P1
   other-modules:
       Paths_aoc2020
   hs-source-dirs:
@@ -82,6 +84,7 @@ library
     , base >=4.7 && <5
     , containers
     , extra
+    , gloss
     , sbv
     , split
     , text
@@ -100,6 +103,7 @@ executable aoc2020-exe
     , base >=4.7 && <5
     , containers
     , extra
+    , gloss
     , sbv
     , split
     , text
@@ -155,6 +159,7 @@ test-suite aoc2020-test
     , base >=4.7 && <5
     , containers
     , extra
+    , gloss
     , sbv
     , split
     , tasty
@@ -178,6 +183,7 @@ benchmark aoc2020-bench
     , containers
     , criterion
     , extra
+    , gloss
     , sbv
     , split
     , text
