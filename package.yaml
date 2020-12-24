@@ -28,6 +28,7 @@ dependencies:
 - split
 - sbv
 - gloss
+- digits
 
 library:
   source-dirs: src
