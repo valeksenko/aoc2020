@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 06d9d09c5741d0520e0823fc9ef0bdc756c9bf5b942aafaedd53b006d2720914
+-- hash: 231545a807b41a0e525fbe6b1c35594950ddafd9f375436e4aba63ffe7881c83
 
 name:           aoc2020
 version:        0.1.0.0
@@ -79,6 +79,7 @@ library
       D22P1
       D22P2
       D23P1
+      D23P2
   other-modules:
       Paths_aoc2020
   hs-source-dirs:

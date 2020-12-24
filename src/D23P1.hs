@@ -4,10 +4,8 @@ module D23P1 (
 
 import Data.List
 import Data.Digits
-import qualified Data.Sequence as S
 
 type Cup = Int
-type Cups = S.Seq Cup 
 
 playcrabcups :: Int -> [Cup] -> Int
 playcrabcups n cups = score $ foldr (\_ c -> play c) cups [1..n]
@@ -18,8 +16,6 @@ playcrabcups n cups = score $ foldr (\_ c -> play c) cups [1..n]
         insert c l l' = update c $ break ((==) (destination l l')) l
         update c (x, (y:ys)) = x ++ y:c ++ ys
         destination l l' = maximum $ if null l' then l else l'
-
-
 
 {-
 https://adventofcode.com/2020/day/23

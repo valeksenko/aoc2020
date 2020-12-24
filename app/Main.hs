@@ -5,7 +5,7 @@ import Debug.Trace
 -- import D19
 -- import D19P1
 
-import D23P1
+import D23P2
 
 -- import Graphics.Gloss
 
@@ -32,7 +32,7 @@ main = do
     -- readFile "data/d20.txt" >>= (print . arrangePhoto . parsePhoto)
     -- readFile "d" >>= (print . arrangePhotoEdge . parsePhoto)
     -- readFile "d" >>= (display window background . renderTiles . foldr (\t a -> t:(rotate90 t):a) [] . parsePhoto)
-    print $ playcrabcups 10 [3,8,9,1,2,5,4,6,7]
-    print $ playcrabcups 100 [3,8,9,1,2,5,4,6,7]
-    print $ playcrabcups 100 [3,2,7,4,6,5,1,8,9]
+    print $ playcrabcups 1000000 [3,8,9,1,2,5,4,6,7]
+    -- print $ playcrabcups 100 [3,8,9,1,2,5,4,6,7]
+    -- print $ playcrabcups 100 [3,2,7,4,6,5,1,8,9]
  
