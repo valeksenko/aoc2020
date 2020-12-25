@@ -5,8 +5,7 @@ import Debug.Trace
 -- import D19
 -- import D19P1
 
-import D21
-import D21P2
+import D25P1
 
 -- import Graphics.Gloss
 
@@ -38,6 +37,5 @@ main = do
     -- print $ playcrabcups 100 [3,8,9,1,2,5,4,6,7]
     -- print $ playcrabcups 100 [3,2,7,4,6,5,1,8,9]
  
-    readFile "d" >>= (print . allergens . map parseIngredientList . lines)
-    readFile "d" >>= (print . map parseIngredientList . lines)
-    readFile "data/d21.txt" >>= (print . allergens . map parseIngredientList . lines)
+    print $ encryptionkey 5764801 17807724
+    print $ encryptionkey 17115212 3667832
