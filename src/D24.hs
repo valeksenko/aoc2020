@@ -38,6 +38,7 @@ parseMoves input = fst $ until (null . snd) parse ([], input)
         parse (m, ('n':'w':s)) = (NorthWest:m, s)
         parse (m, ('n':'e':s)) = (NorthEast:m, s)
 
+-- https://www.redblobgames.com/grids/hexagons/#neighbors
 move :: Coordinate -> Move -> Coordinate
 move (x, y, z) m = case m of
         East      -> (x + 1, y - 1, z)

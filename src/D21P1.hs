@@ -1,18 +1,16 @@
 module D21P1 (
-    parseIngredientList
+    nonallergens
 ) where
 
+import D21
+
 import Data.List
-import Data.List.Split
+import qualified Data.Map as M
 
-type Ingredient = String
-type Allergen = String
-type IngredientList = ([Ingredient], [Allergen])
-
-parseIngredientList :: String -> IngredientList
-parseIngredientList = asList . splitOn " (contains "
+nonallergens :: [IngredientList] -> Int
+nonallergens list = length . nonA . M.elems $ mapAllergens list
     where
-        asList (i:a:[]) = (words i, splitOn ", " $ init a)
+        nonA a = concat . map (flip (\\) a) $ map fst list
 
 {-
 https://adventofcode.com/2020/day/21

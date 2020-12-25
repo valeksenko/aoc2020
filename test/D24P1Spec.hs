@@ -7,7 +7,6 @@ import Test.Tasty.HUnit
 
 import D24
 import D24P1
-import qualified Data.Map as M
 
 tests :: TestTree
 tests = testGroup "Tests" [unitTests]
