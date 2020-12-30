@@ -5,7 +5,8 @@ import Debug.Trace
 -- import D19
 -- import D19P1
 
-import D25P1
+import D20P1
+import D20
 
 -- import Graphics.Gloss
 
@@ -30,12 +31,10 @@ main = do
     -- readFile "data/d18.txt" >>= (print . sum . map (exec . parseStatement) . lines)
 
     -- readFile "data/d20.txt" >>= (print . arrangePhoto . parsePhoto)
-    -- readFile "d" >>= (print . arrangePhotoEdge . parsePhoto)
+    -- readFile "d" >>= (print . toEdge . head . parsePhoto)
+    -- readFile "d2" >>= (print . map toEdge . parsePhoto)
+    readFile "d" >>= (print . arrangePhotoEdge . parsePhoto)
+    -- print $ arrangeEdge
+    --             (Edge {ePoints = [[0,2,3,7,8],[1,2,3,4,5,8],[0,4,5,7],[0,1,3,6,9]], eId = 2473, eSize = 10})
+    --             (Edge {ePoints = [[0,4,5,7],[1,4,5,6,7,8],[0,2,3,7,8],[0,3,6,8,9]], eId = 2473, eSize = 10})
     -- readFile "d" >>= (display window background . renderTiles . foldr (\t a -> t:(rotate90 t):a) [] . parsePhoto)
-    -- print $ playcrabcups 1000000 [3,8,9,1,2,5,4,6,7]
-
-    -- print $ playcrabcups 100 [3,8,9,1,2,5,4,6,7]
-    -- print $ playcrabcups 100 [3,2,7,4,6,5,1,8,9]
- 
-    print $ encryptionkey 5764801 17807724
-    print $ encryptionkey 17115212 3667832
