@@ -7,6 +7,7 @@ import Debug.Trace
 
 import D20P1
 import D20
+import qualified Data.Sequence as S
 
 -- import Graphics.Gloss
 
@@ -30,10 +31,11 @@ main = do
     -- print $ parseStatement "2 * 3 + (4 * 5)"
     -- readFile "data/d18.txt" >>= (print . sum . map (exec . parseStatement) . lines)
 
-    -- readFile "data/d20.txt" >>= (print . arrangePhoto . parsePhoto)
+    readFile "data/d20.txt" >>= (print . arrangePhotoEdge . parsePhoto)
     -- readFile "d" >>= (print . toEdge . head . parsePhoto)
-    -- readFile "d2" >>= (print . map toEdge . parsePhoto)
-    readFile "d" >>= (print . arrangePhotoEdge . parsePhoto)
+    -- readFile "d2" >>= (print . toPhotoEdge . parsePhoto)
+    -- readFile "d" >>= (print . arrangePhotoEdge . parsePhoto)
+    -- readFile "d2" >>= (print . flip validPhotoEdge (S.fromList [1951,2311,3079, 2729,1427,2473, 2971,1489,1171]) . toPhotoEdge . parsePhoto)
     -- print $ arrangeEdge
     --             (Edge {ePoints = [[0,2,3,7,8],[1,2,3,4,5,8],[0,4,5,7],[0,1,3,6,9]], eId = 2473, eSize = 10})
     --             (Edge {ePoints = [[0,4,5,7],[1,4,5,6,7,8],[0,2,3,7,8],[0,3,6,8,9]], eId = 2473, eSize = 10})

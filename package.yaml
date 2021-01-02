@@ -29,6 +29,7 @@ dependencies:
 - sbv
 - gloss
 - digits
+- search-algorithms
 
 library:
   source-dirs: src

@@ -1,11 +1,7 @@
 module D20P1 (
-    arrangePhoto
-  , arrangePhotoEdge
+    arrangePhotoEdge
   , parsePhoto
-  , toEdge
   , Tile(..)
-  , Edge(..)
-  , arrangeEdge
 ) where
 
 import Data.List
@@ -13,17 +9,19 @@ import Data.Tuple
 import Data.Maybe
 import Data.Char
 import Control.Monad
+import Data.Foldable (toList)
 import qualified Data.Map as M
+import Data.Map ((!))
 import qualified Data.Sequence as S
-import Data.Sequence((|>))
-
-import Debug.Trace
+import Data.Sequence ((|>), Seq(..))
+import Algorithm.Search (bfs, pruning)
 
 type Coordinate = (Int, Int)
 type Pixels = M.Map Coordinate Bool
 type TileID = Int
 type Photo = [Tile]
-type PhotoEdge = [Edge]
+type Edge = [[Int]]
+type PhotoEdge = M.Map TileID [Edge]
 
 data Tile =
     Tile {
@@ -32,80 +30,40 @@ data Tile =
       , tSize :: Int
     } deriving(Show, Eq)
 
-data Edge =
-    Edge {
-        ePoints :: [[Int]]
-      , eId :: TileID
-      , eSize :: Int
-    } deriving(Show, Eq)
-
-
-arrangePhoto :: Photo -> Int -- Maybe Photo
-arrangePhoto = length . allPhotos . permutations
-    where
-        allPhotos edges = foldl' transform edges [flipVertical, rotate90, rotate180, rotate270]
-        transform edges f = edges ++ map (map f) edges
-
--- brute force going through all permutations. doesn't finish in a reasonable time
-bruteForceArrangePhotoEdge :: Photo -> Int
-bruteForceArrangePhotoEdge = maybe 0 res . find validPhotoEdge . concatMap permutations . sequence . map edgeVariants . map toEdge
-    where
-        res edges = product $ map (eId . (!!) edges) [0, length edges - 1, size edges, length edges - size edges - 1]
-        size edges = (round . sqrt . fromIntegral $ length edges) - 1
-        edgeVariants edge = traceShowId . nub $ foldr transform [edge] [flipVertical, flipHorizontal, rotate, rotate, rotate]
-        transform f edges = edges ++ map f edges
-        flipVertical (Edge (a:b:c:d:[]) tid s) = Edge [c, flipSide s b, a, flipSide s d] tid s
-        flipHorizontal (Edge (a:b:c:d:[]) tid s) = Edge [flipSide s a, d, flipSide s c, b] tid s
-        flipSide s = reverse . map (flip subtract (s - 1))
-        rotate (Edge (a:b:c:d:[]) tid s) = Edge [flipSide s d, a, flipSide s b, c] tid s
-
 arrangePhotoEdge :: Photo -> Int
-arrangePhotoEdge = maybe 0 res . traceShowID . find validPhotoEdge . concatMap permutations . sequence . map edgeVariants . map toEdge
+arrangePhotoEdge = maybe 0 res . findEdge . toPhotoEdge
     where
-        res edges = product $ map (eId . (!!) edges) [0, length edges - 1, size edges, length edges - size edges - 1]
-        size edges = (round . sqrt . fromIntegral $ length edges) - 1
-        edgeVariants edge = traceShowId . nub $ foldr transform [edge] [flipVertical, flipHorizontal, rotate, rotate, rotate]
+        res ids = product $ map (S.index ids) [0, S.length ids - 1, sideSize ids, S.length ids - (sideSize ids) - 1]
+        findEdge p =  find (validPhotoEdge p) . map S.fromList . permutations $ M.keys p
+        sideSize = subtract 1 . round . sqrt . fromIntegral . S.length
+
+validPhotoEdge :: PhotoEdge -> S.Seq TileID -> Bool
+validPhotoEdge p ids = any isJust . map valid $ p ! (S.index ids 0)
+    where
+        valid e = bfs (nextEdge `pruning` misaligned) ((==) (S.length ids) . S.length) $ S.singleton e
+        nextEdge l = map ((|>) l) $ p ! (S.index ids $ S.length l)
+        misaligned l = not $ (alignedLeft l) && (alignedTop l)
+        alignedLeft (xs :|> e) = (S.length xs `mod` sideSize == 0) || (maybe True (aLeft e) $ S.lookup (S.length xs - 1) xs)
+        aLeft e e' = (e !! 3) == (e' !! 1)
+        alignedTop (xs :|> e) = maybe True (aTop e) $ S.lookup (S.length xs - sideSize) xs
+        aTop e e' = (e !! 0) == (e' !! 2)
+        sideSize = round . sqrt . fromIntegral $ length p 
+
+toPhotoEdge :: Photo -> PhotoEdge
+toPhotoEdge = foldr toEdge M.empty
+    where
+        toEdge t = M.insert (tId t) (edgeVariants (mapEdge t) $ tSize t)
+        mapEdge t = map (edge t) [(0, snd), (subtract 1 $ tSize t, fst), (subtract 1 $ tSize t, snd), (0, fst)]
+        edge t (v, f) = map (f . swap) . filter ((==) v . f) . M.keys $ tPixels t
+
+edgeVariants :: Edge -> Int -> [Edge]
+edgeVariants edge size = nub $ foldr transform [edge] [flipVertical, flipHorizontal, rotate, rotate, rotate]
+    where
         transform f edges = edges ++ map f edges
-        flipVertical (Edge (a:b:c:d:[]) tid s) = Edge [c, flipSide s b, a, flipSide s d] tid s
-        flipHorizontal (Edge (a:b:c:d:[]) tid s) = Edge [flipSide s a, d, flipSide s c, b] tid s
-        flipSide s = reverse . map (flip subtract (s - 1))
-        rotate (Edge (a:b:c:d:[]) tid s) = Edge [flipSide s d, a, flipSide s b, c] tid s
-
-
-validPhotoEdge :: PhotoEdge -> Bool
-validPhotoEdge = (==) [Edge {ePoints = [[1,2,6,7,8,9],[0,1,2,7,8],[3,4],[1,4]], eId = 1171, eSize = 10},Edge {ePoints = [[0,1,2,4,5,7],[1,4],[0,1,3,5],[0,2,4,5,9]], eId = 1489, eSize = 10},Edge {ePoints = [[3,5,7,9],[0,2,4,5,9],[2,4,9],[3,6,7,8]], eId = 2971, eSize = 10},Edge {ePoints = [[2,4,5,6],[1,2,3,4,9],[1,2,6,7,8,9],[1,3,5,6,7]], eId = 2473, eSize = 10},Edge {ePoints = [[2,3,5,8],[1,3,5,6,7],[0,1,2,4,5,7],[6,9]], eId = 1427, eSize = 10},Edge {ePoints = [[0,2,3,7,8],[6,9],[3,5,7,9],[0,1,2,3,8]], eId = 2729, eSize = 10},Edge {ePoints = [[0,2,4,5,6,7,8],[1,6],[2,4,5,6],[0,3,4,6]], eId = 3079, eSize = 10},Edge {ePoints = [[2,3,4,7,8,9],[0,3,4,6],[2,3,5,8],[1,4,5,6,7,8]], eId = 2311, eSize = 10},Edge {ePoints = [[0,4,5,7],[1,4,5,6,7,8],[0,2,3,7,8],[0,3,6,8,9]], eId = 1951, eSize = 10}]
--- validPhotoEdge edges = valid . traceShowPhotoEdgeId edges $ map (\y -> map (\x -> y*limit + x) [0..limit]) [0..limit]
---     where
---         limit = (round . sqrt . fromIntegral $ length edges) - 1
---         edge = ePoints . (!!) edges
---         valid indices = (all matchX indices) && (all matchY $ transpose indices)
---         matchX indices = all mX $ zip (tail indices) indices
---         mX (i', i) = (edge i !! 1) == (edge i' !! 3)
---         matchY indices = all mY $ zip (tail indices) indices
---         mY (i', i) = (edge i !! 2) == (edge i' !! 0)
-
-toEdge :: Tile -> Edge
-toEdge t = Edge mapEdge (tId t) (tSize t)
-    where
-        mapEdge = map edge [(0, snd), (subtract 1 $ tSize t, fst), (subtract 1 $ tSize t, snd), (0, fst)]
-        edge (v, f) = map (f . swap) . filter ((==) v . f) . M.keys $ tPixels t
-
-rotate90 :: Tile -> Tile
-rotate90 tile = adjustTile (\(x, y) -> (y, (tSize tile) - x)) tile
-
-rotate180 :: Tile -> Tile
-rotate180 tile = adjustTile (\(x, y) -> ((tSize tile) - x, (tSize tile) - y)) tile
-
-rotate270 :: Tile -> Tile
-rotate270 tile = adjustTile (\(x, y) -> ((tSize tile) - y, x)) tile
-
-flipVertical :: Tile -> Tile
-flipVertical = adjustTile (\(x, y) -> (negate x, y))
-
-adjustTile :: (Coordinate -> Coordinate) -> Tile -> Tile
-adjustTile f tile = tile { tPixels = adjustK $ tPixels tile }
-    where
-        adjustK = M.foldrWithKey (M.insert . f) M.empty
+        rotate (a:b:c:d:[]) = [flipSide d, a, flipSide b, c]
+        flipVertical (a:b:c:d:[]) = [c, flipSide b, a, flipSide d]
+        flipHorizontal (a:b:c:d:[]) = [flipSide a, d, flipSide c, b]
+        flipSide = reverse . map (flip subtract (size - 1))
 
 parsePhoto :: String -> Photo
 parsePhoto = foldl' parse [] . lines
@@ -113,12 +71,6 @@ parsePhoto = foldl' parse [] . lines
         parse p "" = p
         parse p ('T':l) = (Tile M.empty (read (filter isDigit l) :: TileID) 0):p
         parse (t:p) l = (parseTile t l):p
-
-traceShowPhotoEdgeId :: PhotoEdge -> [[Int]] -> [[Int]]
-traceShowPhotoEdgeId edges indices = indices
--- traceShowPhotoEdgeId edges indices = traceShow photo $ indices
-    where
-        photo = edges
 
 parseTile :: Tile -> String -> Tile
 parseTile tile = update . fst . foldl' parse (tPixels tile, (tSize tile, 0))
