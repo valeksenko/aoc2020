@@ -18,6 +18,7 @@ matchRule _ _ [] = Nothing
 matchRule (LITERAL c) _ (c':s) = if c == c' then Just s else Nothing
 matchRule (RULE ids) rules m = matchAll ids rules m
 
+-- based on https://wiki.haskell.org/Foldl_as_foldr#foldl_which_may_terminate_early
 matchAll :: [RuleId] -> RuleSet -> Message -> Maybe Message
 matchAll ids rules m = foldr (\i a x -> (matchRules (rules M.! i) rules x) >>= a) Just ids m
 

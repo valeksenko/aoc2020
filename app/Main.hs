@@ -2,12 +2,12 @@ module Main where
 
 import Debug.Trace
 
--- import D19
--- import D19P1
+import D19
+import D19P2
 
-import D20P1
-import D20
-import qualified Data.Sequence as S
+-- import D20P1
+-- import D20
+-- import qualified Data.Sequence as S
 
 -- import Graphics.Gloss
 
@@ -24,14 +24,14 @@ main = do
     -- rules <- parseFile "d.r"
     -- print rules
     -- readFile "d.m" >>= (print . length . filter id . map (matchMessage rules) . lines)
-    -- rules <- parseFile "data/d19.rules"
-    -- readFile "data/d19.messages" >>= (print . length . filter id . map (matchMessage rules) . lines)
+    rules <- parseFile "data/d19.rules"
+    readFile "data/d19.messages" >>= (print . length . filter id . map (matchMessage rules) . lines)
 
-    -- parseFile "data/d19.rules" >>= print
+    parseFile "data/d19.rules" >>= print
     -- print $ parseStatement "2 * 3 + (4 * 5)"
     -- readFile "data/d18.txt" >>= (print . sum . map (exec . parseStatement) . lines)
 
-    readFile "data/d20.txt" >>= (print . arrangePhotoEdge . parsePhoto)
+    -- readFile "data/d20.txt" >>= (print . arrangePhotoEdge . parsePhoto)
     -- readFile "d" >>= (print . toEdge . head . parsePhoto)
     -- readFile "d2" >>= (print . toPhotoEdge . parsePhoto)
     -- readFile "d" >>= (print . arrangePhotoEdge . parsePhoto)
